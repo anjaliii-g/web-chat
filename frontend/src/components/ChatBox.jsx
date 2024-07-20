@@ -8,6 +8,19 @@ const ChatBox = () => {
     messagesEndRef.current.scrollIntoView({ behaviour: "smooth" });
   };
   useEffect(scrollToBottom, [messages]);
+  useEffect(() => {
+    const interval = setInterval(() => {
+      fetch("http://localhost:1337/api/chat-room-messages", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+        .then((response) => response.json())
+        .then((res) => setMessages(res.data));
+    }, 5000);
+    return () => clearInterval(interval);
+  }, []);
   return (
     <div className="pb-44 pt-20 container">
       {messages.map((message, id) => (

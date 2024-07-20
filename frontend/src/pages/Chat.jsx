@@ -1,6 +1,6 @@
 import React from "react";
-import ChatBox from "../Components/ChatBox";
-import SendMessage from "../Components/SendMessage";
+import ChatBox from "../components/ChatBox";
+import SendMessage from "../components/SendMessage";
 const Chat = () => {
   return (
     <>

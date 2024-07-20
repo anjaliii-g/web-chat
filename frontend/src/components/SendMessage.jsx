@@ -1,6 +1,10 @@
 import React, { useState } from "react";
+import { UserAuth } from "../context/AuthContext";
 const SendMessage = () => {
   const [value, setValue] = useState("");
+  const { currentUser } = UserAuth();
+  const [displayName, setDisplayName] = useState("");
+  const [photoURL, setPhotoURL] = useState("");
   const handleSendMessage = (e) => {
     e.preventDefault();
     console.log(value);
@@ -8,7 +12,32 @@ const SendMessage = () => {
       alert("Enter valid message!");
       return;
     }
+    try {
+      const { displayName, photoURL } = currentUser;
+      if (currentUser) {
+        fetch("http://localhost:1337/api/chat-room-messages", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            data: {
+              message: value,
+              User: displayName,
+              Photo: photoURL,
+            },
+          }),
+        })
+          .then((response) => response.json())
+          .then((data) => console.log(data));
+      }
+    } catch (error) {
+      console.log(error);
+    }
     setValue("");
+    setDisplayName(displayName);
+    setPhotoURL(photoURL);
+    console.log(currentUser);
   };
   return (
     <div className="bg-gray-200 fixed w-full py-10 shadow-lg bottom-0">
